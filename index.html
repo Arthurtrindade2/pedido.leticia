@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Leticia ❤️</title>
+<style>
+:root{
+  --night:#1b0a16; --wine:#4a1230; --ruby:#c8265f; --ruby-d:#9e1a48;
+  --champagne:#f5dfc4; --blush:#f6b8c8; --gold:#d9a96a;
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua",Georgia,serif;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{
+  font-family:var(--serif);color:var(--champagne);background:var(--night);
+  background-image:
+    radial-gradient(60vmax 60vmax at 15% 10%,rgba(200,38,95,.28),transparent 60%),
+    radial-gradient(70vmax 70vmax at 90% 95%,rgba(217,169,106,.16),transparent 60%),
+    radial-gradient(80vmax 80vmax at 50% 50%,var(--wine),var(--night) 75%);
+  background-attachment:fixed;overflow-x:hidden;
+}
+#ambient{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:0}
+#ambient i{position:absolute;bottom:-40px;color:var(--blush);opacity:.0;font-style:normal;animation:rise linear infinite}
+@keyframes rise{0%{transform:translateY(0);opacity:0}10%{opacity:.22}90%{opacity:.12}100%{transform:translateY(-115vh);opacity:0}}
+
+.screen{display:none;position:relative;z-index:1;min-height:100dvh;
+  flex-direction:column;align-items:center;justify-content:center;text-align:center;
+  padding:calc(28px + env(safe-area-inset-top)) 24px calc(28px + env(safe-area-inset-bottom));gap:26px}
+.screen.on{display:flex;animation:fade .8s ease both}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+
+h1,h2{font-weight:400;font-style:italic;letter-spacing:.01em;line-height:1.18}
+h1{font-size:clamp(2rem,8.5vw,3.4rem);max-width:15ch}
+h2{font-size:clamp(1.7rem,7vw,2.6rem);max-width:18ch}
+p.soft{font-size:clamp(1.05rem,4.4vw,1.35rem);color:var(--blush);max-width:26ch;line-height:1.5}
+
+.btn{font-family:var(--sans);font-size:1.05rem;font-weight:600;letter-spacing:.02em;
+  border:0;border-radius:999px;padding:15px 30px;cursor:pointer;color:#fff;background:var(--ruby);
+  box-shadow:0 0 0 1px rgba(255,255,255,.12) inset,0 10px 30px -8px rgba(200,38,95,.7);
+  transition:transform .2s,background .2s,box-shadow .2s;touch-action:manipulation}
+.btn:hover{background:var(--ruby-d);transform:translateY(-2px)}
+.btn:active{transform:scale(.97)}
+.btn:focus-visible,.day:focus-visible,.nav:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+.btn.ghost{background:transparent;color:var(--champagne);box-shadow:0 0 0 1.5px var(--gold) inset}
+.btn.ghost:hover{background:rgba(217,169,106,.12)}
+
+/* Anillo de CSS */
+.ring{position:relative;width:84px;height:104px;margin-bottom:6px}
+.ring::before{content:"";position:absolute;left:50%;bottom:0;width:70px;height:70px;margin-left:-35px;
+  border-radius:50%;border:7px solid var(--gold);box-shadow:0 0 30px rgba(217,169,106,.45),inset 0 0 12px rgba(217,169,106,.35)}
+.ring::after{content:"";position:absolute;left:50%;top:6px;width:26px;height:26px;margin-left:-13px;
+  background:linear-gradient(135deg,#fff,#ffd9e4 45%,#e98aa8);transform:rotate(45deg);border-radius:4px;
+  box-shadow:0 0 22px 4px rgba(255,200,220,.75);animation:shine 3.2s ease-in-out infinite}
+@keyframes shine{0%,100%{box-shadow:0 0 14px 2px rgba(255,200,220,.5)}50%{box-shadow:0 0 30px 8px rgba(255,220,235,.95)}}
+
+/* Pregunta */
+.q{font-size:clamp(2.2rem,10vw,3.8rem);font-style:italic;font-weight:400;line-height:1.1;max-width:12ch}
+.row{display:flex;gap:18px;align-items:center;justify-content:center;flex-wrap:wrap;min-height:70px}
+#yes{transform:scale(var(--s,1));transition:transform .45s cubic-bezier(.34,1.56,.64,1),background .2s;padding:16px 40px}
+#yes:hover{transform:scale(calc(var(--s,1) * 1.05))}
+#noSlot{display:inline-block}
+#no{user-select:none;-webkit-user-select:none;touch-action:none;z-index:50;
+  transition:left .5s cubic-bezier(.34,1.56,.64,1),top .5s cubic-bezier(.34,1.56,.64,1),background .2s}
+
+/* Sí */
+.big{font-size:clamp(1.9rem,9vw,3.6rem);font-style:italic;font-weight:400;line-height:1.15;max-width:12ch;overflow-wrap:anywhere;
+  color:var(--champagne);text-shadow:0 0 28px rgba(200,38,95,.8);animation:pulse 1.4s ease-in-out infinite}
+@keyframes pulse{50%{transform:scale(1.05)}}
+#more{opacity:0;pointer-events:none;transition:opacity 1s}
+#more.show{opacity:1;pointer-events:auto}
+
+/* Calendario */
+#fecha{justify-content:flex-start;padding-top:calc(40px + env(safe-area-inset-top))}
+.cal{width:min(100%,360px);background:rgba(27,10,22,.55);border:1px solid rgba(217,169,106,.45);
+  border-radius:22px;padding:16px 14px 14px;backdrop-filter:blur(6px)}
+.calhead{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.calhead b{font-weight:400;font-style:italic;font-size:1.35rem;text-transform:capitalize}
+.nav{width:42px;height:42px;border-radius:50%;border:1px solid var(--gold);background:none;color:var(--champagne);font-size:1.2rem;cursor:pointer}
+.nav:disabled{opacity:.25;cursor:default}
+.grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.wd{font-family:var(--sans);font-size:.72rem;color:var(--gold);padding:6px 0}
+.day{font-family:var(--sans);aspect-ratio:1;border:0;border-radius:50%;background:none;color:var(--champagne);font-size:.98rem;cursor:pointer;transition:background .2s,transform .2s}
+.day:hover:not(:disabled){background:rgba(246,184,200,.2)}
+.day:disabled{opacity:.22;cursor:default}
+.day.today{box-shadow:0 0 0 1px var(--gold) inset}
+.day.sel{background:var(--ruby);color:#fff;font-weight:700;transform:scale(1.08);box-shadow:0 0 18px rgba(200,38,95,.8)}
+#chosen{display:none;flex-direction:column;align-items:center;gap:14px;animation:fade .6s ease both}
+#chosen.on{display:flex}
+#chosen .t{font-size:1.7rem;font-style:italic}
+#chosen .d{font-size:1.25rem;color:var(--blush);max-width:20ch}
+
+/* Final */
+.final .d2{font-size:1.1rem;color:var(--gold);font-style:italic}
+
+#fx{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:40}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition-duration:.01s!important}}
+</style>
+</head>
+<body>
+<div id="ambient" aria-hidden="true"></div>
+<canvas id="fx" aria-hidden="true"></canvas>
+
+<!-- 1 -->
+<main class="screen on" id="inicio">
+  <div class="ring" aria-hidden="true"></div>
+  <h1>Leticia, tengo una pregunta para vos...</h1>
+  <button class="btn" id="goQ">Ver la pregunta ❤️</button>
+</main>
+
+<!-- 2 -->
+<main class="screen" id="pregunta">
+  <h2 class="q">Te casarías conmigo? 💍❤️</h2>
+  <div class="row">
+    <button class="btn" id="yes">Sí ❤️</button>
+    <span id="noSlot"><button class="btn ghost" id="no">No 😈</button></span>
+  </div>
+</main>
+
+<!-- 3 -->
+<main class="screen" id="si">
+  <h2 class="big">¡¡¡ESO ES UN SÍÍÍÍÍ!!! 😭❤️</h2>
+  <p class="soft">Sabía que ibas a decir que sí 😌💍</p>
+  <button class="btn" id="more">Hay algo más... ❤️</button>
+</main>
+
+<!-- 4 -->
+<main class="screen" id="fecha">
+  <p class="soft">Ahora tenemos que elegir algo importante...</p>
+  <h2>Qué día vamos a empezar esta nueva etapa juntos? ❤️</h2>
+  <div class="cal">
+    <div class="calhead">
+      <button class="nav" id="prev" aria-label="Mes anterior">‹</button>
+      <b id="calTitle"></b>
+      <button class="nav" id="next" aria-label="Mes siguiente">›</button>
+    </div>
+    <div class="grid" id="wds"></div>
+    <div class="grid" id="days"></div>
+  </div>
+  <div id="chosen">
+    <div class="t">¡Tenemos una fecha! ❤️</div>
+    <div class="d" id="chosenDate"></div>
+    <button class="btn" id="confirm">Confirmar ❤️</button>
+  </div>
+</main>
+
+<!-- 5 -->
+<main class="screen final" id="final">
+  <div class="ring" aria-hidden="true"></div>
+  <h1>Te amo, Leticia. ❤️</h1>
+  <p class="soft">Y ahora ya no podés decir que no 😂💍</p>
+  <p class="d2" id="finalDate"></p>
+</main>
+
+<script>
+(function(){
+const $=s=>document.querySelector(s);
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const MES=['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+const DIA=['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
+
+/* ---------- Pantallas ---------- */
+function go(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('on',s.id===id));
+  scrollTo(0,0);
+}
+
+/* ---------- Corazones de fondo ---------- */
+if(!reduce){
+  const amb=$('#ambient');
+  for(let i=0;i<14;i++){
+    const h=document.createElement('i');h.textContent='♥';
+    h.style.left=Math.random()*100+'%';
+    h.style.fontSize=(10+Math.random()*22)+'px';
+    h.style.animationDuration=(14+Math.random()*16)+'s';
+    h.style.animationDelay=(-Math.random()*20)+'s';
+    amb.appendChild(h);
+  }
+}
+
+/* ---------- Corazones y confeti (canvas) ---------- */
+const cv=$('#fx'),cx=cv.getContext('2d');
+let P=[],running=false,rainUntil=0,W=0,H=0;
+function fit(){const d=devicePixelRatio||1;W=innerWidth;H=innerHeight;cv.width=W*d;cv.height=H*d;cx.setTransform(d,0,0,d,0,0)}
+fit();addEventListener('resize',fit);
+const COL=['#c8265f','#f6b8c8','#d9a96a','#ffffff','#ff6f9c','#f5dfc4'];
+const HP=[];for(let i=0;i<28;i++){const t=i/28*Math.PI*2;
+  HP.push([16*Math.pow(Math.sin(t),3),-(13*Math.cos(t)-5*Math.cos(2*t)-2*Math.cos(3*t)-Math.cos(4*t))])}
+function drawHeart(c,s){c.beginPath();HP.forEach((p,i)=>{const x=p[0]*s/32,y=p[1]*s/32;i?c.lineTo(x,y):c.moveTo(x,y)});c.closePath();c.fill()}
+function add(o){P.push(Object.assign({rot:Math.random()*6.28,vr:(Math.random()-.5)*.2,life:1,color:COL[(Math.random()*COL.length)|0]},o))}
+function burst(n){
+  for(let i=0;i<n;i++){
+    const a=Math.random()*Math.PI*2,v=4+Math.random()*10,heart=Math.random()<.45;
+    add({x:W/2,y:H*.42,vx:Math.cos(a)*v,vy:Math.sin(a)*v-3,g:.18,size:heart?16+Math.random()*20:6+Math.random()*7,type:heart?'h':'c',decay:.004})
+  }
+}
+function spawn(){
+  if(Math.random()<.5) add({x:Math.random()*W,y:H+20,vx:(Math.random()-.5)*1.2,vy:-(1.5+Math.random()*2.5),g:-.004,size:14+Math.random()*20,type:'h',decay:.0035});
+  if(Math.random()<.6) add({x:Math.random()*W,y:-14,vx:(Math.random()-.5)*2,vy:1.5+Math.random()*2,g:.02,size:6+Math.random()*7,type:'c',decay:.0012});
+}
+function loop(now){
+  cx.clearRect(0,0,W,H);
+  if(now<rainUntil)spawn();
+  P=P.filter(p=>p.life>0&&p.y>-60&&p.y<H+60);
+  P.forEach(p=>{
+    p.vx*=.992;p.vy+=p.g;p.x+=p.vx;p.y+=p.vy;p.rot+=p.vr;p.life-=p.decay;
+    cx.save();cx.translate(p.x,p.y);cx.rotate(p.type==='h'?Math.sin(p.rot)*.4:p.rot);
+    cx.globalAlpha=Math.min(1,p.life*2);cx.fillStyle=p.color;
+    if(p.type==='h')drawHeart(cx,p.size);else cx.fillRect(-p.size/2,-p.size/4,p.size,p.size/2);
+    cx.restore();
+  });
+  if(P.length||now<rainUntil)requestAnimationFrame(loop);else{running=false;cx.clearRect(0,0,W,H)}
+}
+function celebrate(ms,n){
+  burst(reduce?Math.min(n,25):n);
+  rainUntil=performance.now()+(reduce?0:ms);
+  if(!running){running=true;requestAnimationFrame(loop)}
+}
+
+/* ---------- Flujo ---------- */
+$('#goQ').onclick=()=>go('pregunta');
+
+$('#yes').onclick=()=>{
+  go('si');
+  celebrate(7000,150);
+  setTimeout(()=>$('#more').classList.add('show'),2200);
+};
+$('#more').onclick=()=>{go('fecha');render()};
+
+/* ---------- Botón "No" que escapa ---------- */
+const no=$('#no'),yes=$('#yes'),slot=$('#noSlot');
+let detached=false,dodges=0,lastDodge=0;
+
+function detach(){
+  if(detached)return;
+  const r=no.getBoundingClientRect();
+  slot.style.width=r.width+'px';slot.style.height=r.height+'px';
+  no.style.position='fixed';no.style.margin='0';
+  no.style.left=r.left+'px';no.style.top=r.top+'px';
+  detached=true;
+}
+function dodge(){
+  detach();
+  const now=performance.now();
+  if(now-lastDodge<260)return;
+  lastDodge=now;
+  const w=no.offsetWidth,h=no.offsetHeight,m=14;
+  const yr=yes.getBoundingClientRect(),cur=no.getBoundingClientRect();
+  const minJump=Math.min(innerWidth,innerHeight)*.3;
+  let x=cur.left,y=cur.top;
+  for(let i=0;i<60;i++){
+    const nx=m+Math.random()*Math.max(1,innerWidth-w-2*m);
+    const ny=m+Math.random()*Math.max(1,innerHeight-h-2*m);
+    const clearOfYes=nx>yr.right+18||nx+w<yr.left-18||ny>yr.bottom+18||ny+h<yr.top-18;
+    if(clearOfYes&&Math.hypot(nx-cur.left,ny-cur.top)>minJump){x=nx;y=ny;break}
+    if(clearOfYes){x=nx;y=ny}
+  }
+  no.style.left=x+'px';no.style.top=y+'px';
+  dodges++;
+  yes.style.setProperty('--s',Math.min(1+dodges*.06,1.4));
+}
+// Touch y mouse: reaccionan al instante, antes de que exista un "clic"
+no.addEventListener('pointerdown',e=>{e.preventDefault();lastDodge=0;dodge()});
+no.addEventListener('touchstart',e=>{e.preventDefault();lastDodge=0;dodge()},{passive:false});
+no.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();lastDodge=0;dodge()});
+no.addEventListener('focus',()=>{lastDodge=0;dodge()});
+// Mouse: huye cuando el cursor se acerca
+document.addEventListener('pointermove',e=>{
+  if(e.pointerType!=='mouse'||!$('#pregunta').classList.contains('on'))return;
+  const r=no.getBoundingClientRect(),pad=90;
+  if(e.clientX>r.left-pad&&e.clientX<r.right+pad&&e.clientY>r.top-pad&&e.clientY<r.bottom+pad)dodge();
+});
+addEventListener('resize',()=>{
+  if(!detached)return;
+  const w=no.offsetWidth,h=no.offsetHeight;
+  no.style.left=Math.max(14,Math.min(parseFloat(no.style.left),innerWidth-w-14))+'px';
+  no.style.top=Math.max(14,Math.min(parseFloat(no.style.top),innerHeight-h-14))+'px';
+});
+
+/* ---------- Calendario ---------- */
+const now0=new Date(),today=new Date(now0.getFullYear(),now0.getMonth(),now0.getDate());
+const thisMonth=new Date(today.getFullYear(),today.getMonth(),1);
+let view=new Date(thisMonth),picked=null;
+$('#wds').innerHTML=['lu','ma','mi','ju','vi','sá','do'].map(d=>'<span class="wd">'+d+'</span>').join('');
+
+function sameDay(a,b){return a&&b&&a.getTime()===b.getTime()}
+function longDate(d){
+  const s=DIA[d.getDay()]+' '+d.getDate()+' de '+MES[d.getMonth()]+' de '+d.getFullYear();
+  return s.charAt(0).toUpperCase()+s.slice(1);
+}
+function render(){
+  const y=view.getFullYear(),m=view.getMonth();
+  $('#calTitle').textContent=MES[m]+' '+y;
+  $('#prev').disabled=view<=thisMonth;
+  const g=$('#days');g.innerHTML='';
+  const offset=(new Date(y,m,1).getDay()+6)%7;
+  for(let i=0;i<offset;i++)g.appendChild(document.createElement('span'));
+  const total=new Date(y,m+1,0).getDate();
+  for(let d=1;d<=total;d++){
+    const date=new Date(y,m,d),b=document.createElement('button');
+    b.type='button';b.className='day';b.textContent=d;
+    b.setAttribute('aria-label',longDate(date));
+    if(date<today)b.disabled=true;
+    if(sameDay(date,today))b.classList.add('today');
+    if(sameDay(date,picked))b.classList.add('sel');
+    b.onclick=()=>{
+      picked=date;render();
+      $('#chosenDate').textContent=longDate(date);
+      $('#chosen').classList.add('on');
+      celebrate(1500,40);
+      setTimeout(()=>$('#chosen').scrollIntoView({behavior:reduce?'auto':'smooth',block:'center'}),80);
+    };
+    g.appendChild(b);
+  }
+}
+$('#prev').onclick=()=>{view=new Date(view.getFullYear(),view.getMonth()-1,1);render()};
+$('#next').onclick=()=>{view=new Date(view.getFullYear(),view.getMonth()+1,1);render()};
+
+$('#confirm').onclick=()=>{
+  $('#finalDate').textContent='Nuestra fecha: '+longDate(picked);
+  go('final');
+  celebrate(6000,120);
+};
+})();
+</script>
+</body>
+</html>
